@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<title>Quiz do Amor 💖</title>
+<style>
+    html, body {
+        margin: 0; padding: 0;
+        overflow: hidden;
+        height: 100%;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        color: #d63384;
+        background-color: #fff0f5;
+        position: relative;
+    }
+
+    .container {
+        max-width: 600px;
+        background-color: rgba(255, 240, 245, 0.3);
+        padding: 20px 30px 40px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px pink;
+        margin: 60px auto;
+        position: relative;
+        z-index: 10;
+        text-align: center;
+    }
+    h1 {
+        font-size: 2.5em;
+        margin-bottom: 5px;
+    }
+    p.intro {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    button {
+        background-color: #d63384;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        margin-top: 10px;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 1.2em;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 5px 10px rgba(214,51,132,0.5);
+    }
+    button:hover {
+        background-color: #a61e66;
+    }
+    .result {
+        margin-top: 20px;
+        font-size: 1.3em;
+        color: #a61e66;
+        text-align: left;
+    }
+
+    .question {
+        font-size: 1.3em;
+        margin: 15px 0 10px 0;
+        font-weight: 600;
+        color: #d63384;
+    }
+    input[type=text] {
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 2px solid #d63384;
+        font-size: 1em;
+        width: 80%;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+    input[type=text]:focus {
+        border-color: #a61e66;
+        box-shadow: 0 0 8px #a61e66;
+    }
+
+    .heart {
+        position: fixed;
+        top: -40px;
+        font-size: 1.8em;
+        animation-name: cair;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        pointer-events: none;
+        user-select: none;
+        z-index: 9999;
+        text-shadow: 0 0 5px #ff69b4;
+    }
+    @keyframes cair {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(110vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    .mensagem-amor {
+        position: fixed;
+        width: auto;
+        font-size: 1.2em;
+        font-weight: bold;
+        animation: mover 8s linear infinite alternate, corzinhas 6s infinite;
+        z-index: 10000;
+        color: #ff1493;
+        text-shadow: 0 0 15px #ff69b4, 0 0 25px #ff1493;
+        user-select: none;
+        white-space: nowrap;
+    }
+
+    @keyframes mover {
+        0% { top: 0; left: 0; }
+        25% { top: 0; left: calc(100% - 300px); }
+        50% { top: calc(100% - 60px); left: calc(100% - 300px); }
+        75% { top: calc(100% - 60px); left: 0; }
+        100% { top: 0; left: 0; }
+    }
+
+    @keyframes corzinhas {
+        0% { color: #ff69b4; }
+        25% { color: #ff1493; }
+        50% { color: #ff4500; }
+        75% { color: #db7093; }
+        100% { color: #ff69b4; }
+    }
+</style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>💖 Quiz do Amor 💖</h1>
+        <p class="intro">Vamos ver se você, meu amor, ainda lembra de có nossa história!</p>
+        <button id="start-btn">Começar Quiz</button>
+
+        <div id="quiz" style="display:none; margin-top:20px;"></div>
+
+        <div class="result" id="resultado"></div>
+    </div>
+
+<script>
+    document.body.style.overflow = 'hidden';
+
+    const perguntas = [
+        {pergunta: "1️⃣ Qual data começou nossa história juntos?", resposta: "10/01/2022"},
+        {pergunta: "2️⃣ Qual música lembra nós dois?", resposta: "saturno"},
+        {pergunta: "3️⃣ Qual foi o nosso primeiro filme juntos?", resposta: "barbie, sei la moh kkk"},
+        {pergunta: "4️⃣ Aonde foi o nosso primeiro beijão?", resposta: "no alprendre da mãe"},
+        {pergunta: "5️⃣ Qual jogo mais jogamos juntos?", resposta: ["freefire", "minecraft"]},
+        {pergunta: "6️⃣ Quem é mais romântico da relação?", resposta: "moh"},
+        {pergunta: "7️⃣ Qual foi o presente mais especial que já te dei?", resposta: "aliança"},
+        {pergunta: "8️⃣ Qual é a comida preferida do casal?", resposta: "açai"},
+        {pergunta: "9️⃣ Como vai ser o nome do nosso filho/a?", resposta: null},
+        {pergunta: "🔟 Vamos nós casar?", resposta: "sim"}
+    ];
+
+    const quizDiv = document.getElementById('quiz');
+    const resultadoDiv = document.getElementById('resultado');
+    const startBtn = document.getElementById('start-btn');
+
+    let indiceAtual = 0;
+
+    startBtn.addEventListener('click', () => {
+        startBtn.style.display = 'none';
+        resultadoDiv.innerHTML = '';
+        indiceAtual = 0;
+        quizDiv.style.display = 'block';
+        mostrarPergunta(indiceAtual);
+    });
+
+    function mostrarPergunta(i) {
+        quizDiv.innerHTML = `
+            <div class="question">${perguntas[i].pergunta}</div>
+            <input type="text" id="resposta" autocomplete="off" autofocus />
+            <br>
+            <button id="proximo-btn">${i === perguntas.length -1 ? 'Enviar Respostas' : 'Próxima'}</button>
+        `;
+        document.getElementById('proximo-btn').addEventListener('click', () => {
+            const respostaInput = document.getElementById('resposta');
+            const respostaUsuario = respostaInput.value.trim();
+            if (!respostaUsuario) {
+                alert('Por favor, responda a pergunta, meu amor! 💖');
+                respostaInput.focus();
+                return;
+            }
+            perguntas[i].respostaUsuario = respostaUsuario;
+            if (i < perguntas.length -1) {
+                mostrarPergunta(i+1);
+            } else {
+                verificarRespostas();
+            }
+        });
+    }
+
+    function verificarRespostas() {
+        let texto = '';
+        let acertos = 0;
+        for (let i = 0; i < perguntas.length; i++) {
+            let userResp = perguntas[i].respostaUsuario.toLowerCase();
+            if (perguntas[i].resposta === null) {
+                texto += `${perguntas[i].pergunta} <br> Sua resposta: ${perguntas[i].respostaUsuario}<br><br>`;
+                continue;
+            }
+            if (Array.isArray(perguntas[i].resposta)) {
+                if (perguntas[i].resposta.includes(userResp)) {
+                    texto += `${perguntas[i].pergunta} ✔️ Correta!<br><br>`;
+                    acertos++;
+                } else {
+                    texto += `${perguntas[i].pergunta} ❌ Errada. Resposta correta: ${perguntas[i].resposta.join(' ou ')}<br><br>`;
+                }
+            } else {
+                if (userResp === perguntas[i].resposta.toLowerCase()) {
+                    texto += `${perguntas[i].pergunta} ✔️ Correta!<br><br>`;
+                    acertos++;
+                } else {
+                    texto += `${perguntas[i].pergunta} ❌ Errada. Resposta correta: ${perguntas[i].resposta}<br><br>`;
+                }
+            }
+        }
+
+        resultadoDiv.innerHTML = texto;
+
+        document.body.style.overflow = 'auto';
+
+        if (perguntas[9].respostaUsuario.toLowerCase() === 'sim') {
+            for(let i=0; i<40; i++) {
+                criarEmoji('💍');
+                criarEmoji('🤍');
+            }
+            mostrarMensagem();
+        } else {
+            for(let i=0; i<40; i++) {
+                criarEmoji('😂');
+            }
+        }
+
+        quizDiv.style.display = 'none';
+    }
+
+    function criarEmoji(emoji) {
+        const el = document.createElement('div');
+        el.classList.add('heart');
+        el.innerText = emoji;
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 6000);
+    }
+
+    function mostrarMensagem() {
+        const mensagem = document.createElement('div');
+        mensagem.classList.add('mensagem-amor');
+        mensagem.innerText = 'EU TE AMO MUITO, MEU AMOR';
+        document.body.appendChild(mensagem);
+        for(let i=0; i<50; i++) {
+            criarEmoji('💖');
+        }
+    }
+
+    setInterval(() => {
+        criarEmoji('💖');
+    }, 500);
+</script>
+</body>
+</html>
