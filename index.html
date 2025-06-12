@@ -9,7 +9,7 @@
         margin: 0; padding: 0;
         overflow: hidden;
         height: 100%;
-        font-family: 'Comic Sans MS', cursive, sans-serif;
+        font-family: 'Poppins', cursive, sans-serif;
         color: #d63384;
         background-color: #fff0f5;
         position: relative;
@@ -114,7 +114,7 @@
     .mensagem-amor {
         position: fixed;
         width: auto;
-        font-size: 1em;
+        font-size: 3em;
         font-weight: bold;
         animation: mover 8s linear infinite alternate, corzinhas 6s infinite;
         z-index: 10000;
@@ -160,7 +160,7 @@
 <body>
 <div class="container">
     <h1>💖 Quiz do Amor 💖</h1>
-    <p class="intro">Vamos ver se você, meu amor, ainda lembra da nossa história!</p>
+    <p class="intro">Vamos ver se mohzin ainda lembra de có nossa história!</p>
     <button id="start-btn">Começar Quiz</button>
     <div id="quiz" style="display:none; margin-top:20px;"></div>
     <div class="result" id="resultado"></div>
@@ -277,7 +277,7 @@ function criarEmoji(emoji) {
 function mostrarMensagem() {
     const mensagem = document.createElement('div');
     mensagem.classList.add('mensagem-amor');
-    mensagem.innerText = 'EU TE AMO MUITO, MEU AMOR';
+    mensagem.innerText = 'EU TE AMO MUITO, E SMP TE AMAREI';
     document.body.appendChild(mensagem);
     for(let i=0; i<50; i++) {
         criarEmoji('💖');
